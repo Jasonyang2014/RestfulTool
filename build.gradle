@@ -2,55 +2,85 @@ plugins {
     // Java support
     id "java"
     // Kotlin support
-    id "org.jetbrains.kotlin.jvm" version "1.4.32"
-    id 'org.jetbrains.intellij' version '0.7.2'
+    id "org.jetbrains.kotlin.jvm" version "2.0.20"
+    id 'org.jetbrains.intellij.platform' version '2.0.1'
 }
-sourceCompatibility = JavaVersion.VERSION_1_10
-targetCompatibility = JavaVersion.VERSION_1_10
+sourceCompatibility = JavaVersion.VERSION_21
+targetCompatibility = JavaVersion.VERSION_21
 
 repositories {
     mavenCentral()
-    jcenter()
+
+    intellijPlatform {
+        defaultRepositories()
+    }
 }
 
 dependencies {
-    testCompile group: 'junit', name: 'junit', version: '4.12'
+    intellijPlatform {
+        intellijIdeaCommunity("2024.2")
 
+        bundledPlugin("com.intellij.java")
+        bundledPlugin("com.intellij.properties")
+        bundledPlugin("org.jetbrains.plugins.yaml")
+//        bundledPlugin("org.jetbrains.kotlin")
+
+        instrumentationTools()
+    }
+
+    // https://mvnrepository.com/artifact/org.junit.jupiter/junit-jupiter
+    testImplementation 'org.junit.jupiter:junit-jupiter:5.11.0'
     //noinspection SpellCheckingInspection
-    implementation('cn.hutool:hutool-all:5.3.9')
+    //implementation(// https://mvnrepository.com/artifact/cn.hutool/hutool-all
+    implementation 'cn.hutool:hutool-all:5.8.32'
+    // https://mvnrepository.com/artifact/org.dom4j/dom4j
+    implementation 'org.dom4j:dom4j:2.1.4'
+// https://mvnrepository.com/artifact/org.apache.logging.log4j/log4j-core
+    implementation 'org.apache.logging.log4j:log4j-core:2.24.0'
 
-    implementation('dom4j:dom4j:1.6.1')
 }
 
-intellij {
-    updateSinceUntilBuild true
-    type 'IC'
-//    version '2020.2'
-//    version 'LATEST-EAP-SNAPSHOT'
-    version '2021.1'
-    pluginName 'RestfulTool'
 
-    plugins = ['java', 'properties', 'yaml', 'Kotlin']
-}
+//intellijPlatform {
+//    platformType = IC
+//    platformVersion = 2024.2
+//}
+//intellij {
+//    updateSinceUntilBuild true
+//    type 'IC'
+////    version '2020.2'
+////    version 'LATEST-EAP-SNAPSHOT'
+//    version '2024.1'
+//    pluginName 'RestfulTool'
+//
+//    plugins = ['java', 'properties', 'yaml', 'Kotlin']
+//}
 
-publishPlugin {
-    // 发布插件，token在`https://plugins.jetbrains.com/author/me/tokens`申请
-    token System.getenv("IdeaToken")
-    // channels 'beta'
-    channels 'stable'
-}
+//intellijPlatform{
+//
+//    publishing{
+//
+//    }
+//}
+
+//publishPlugin {
+//    // 发布插件，token在`https://plugins.jetbrains.com/author/me/tokens`申请
+//    token System.getenv("IdeaToken")
+//    // channels 'beta'
+//    channels 'stable'
+//}
 
 group 'cn.cloud.auto.restful.tool'
 version '1.3.4'
-patchPluginXml {
-    changeNotes """
-        <ul>
-            <li>Add method navigation to view</li>
-            <li>Add Class file display</li>
-            <li>fix bugs</li>
-        </ul>
-    """
-}
+//patchPluginXml {
+//    changeNotes """
+//        <ul>
+//            <li>Add method navigation to view</li>
+//            <li>Add Class file display</li>
+//            <li>fix bugs</li>
+//        </ul>
+//    """
+//}
 
 //编译JAVA文件时采用UTF-8
 //noinspection GroovyAssignabilityCheck

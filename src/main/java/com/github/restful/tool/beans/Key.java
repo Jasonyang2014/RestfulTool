@@ -25,7 +25,8 @@ import java.util.concurrent.atomic.AtomicInteger;
 public class Key<T> {
 
     private static final AtomicInteger OUR_KEYS_COUNTER = new AtomicInteger();
-    private static final IntObjectMap<Key<?>> ALL_KEYS = ContainerUtil.createConcurrentIntObjectWeakValueMap();
+    //    private static final IntObjectMap<Key<?>> ALL_KEYS = ContainerUtil.createConcurrentIntObjectWeakValueMap();
+    private static final IntObjectMap<Key<?>> ALL_KEYS = ContainerUtil.createIntKeyWeakValueMap();
 
     private final int index = OUR_KEYS_COUNTER.getAndIncrement();
 
@@ -35,7 +36,9 @@ public class Key<T> {
     protected Key(String name, T defaultData) {
         this.name = name;
         this.defaultData = defaultData;
-        ALL_KEYS.put(getIndex(), this);
+        synchronized (Key.class) {
+            ALL_KEYS.put(getIndex(), this);
+        }
     }
 
     @NotNull
@@ -45,7 +48,7 @@ public class Key<T> {
     }
 
     @Nullable
-    public static Key<?> findKeyByName(@NotNull String name) {
+    public static synchronized Key<?> findKeyByName(@NotNull String name) {
         for (IntObjectMap.Entry<Key<?>> key : ALL_KEYS.entrySet()) {
             if (name.equals(key.getValue().name)) {
                 return key.getValue();
@@ -55,7 +58,7 @@ public class Key<T> {
     }
 
     @NotNull
-    public static IntObjectMap<Key<?>> getAllKeys() {
+    public static synchronized IntObjectMap<Key<?>> getAllKeys() {
         return Key.ALL_KEYS;
     }
 

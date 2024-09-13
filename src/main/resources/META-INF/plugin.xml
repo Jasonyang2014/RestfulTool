@@ -37,10 +37,10 @@
         </ul>
         ]]></description>
 
-    <idea-version since-build="201.0"/>
+    <idea-version since-build="2024.2"/>
 
     <depends>com.intellij.modules.platform</depends>
-    <depends>com.intellij.modules.java</depends>
+    <depends>com.intellij.java</depends>
     <depends>com.intellij.properties</depends>
     <depends>org.jetbrains.plugins.yaml</depends>
     <depends>org.jetbrains.kotlin</depends>
