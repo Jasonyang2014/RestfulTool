@@ -63,6 +63,7 @@ public class ProjectConfigUtil {
         final String bootstrapName = "bootstrap";
         final String[] bootstrapNames = {
                 bootstrapName + "." + YAMLFileType.DEFAULT_EXTENSION,
+                bootstrapName + ".yaml",
                 bootstrapName + "." + PropertiesFileType.DEFAULT_EXTENSION,
         };
 
@@ -217,6 +218,7 @@ public class ProjectConfigUtil {
         final String[] configurationFileNames = {
                 // yaml file
                 configurationPrefix + "." + YAMLFileType.DEFAULT_EXTENSION,
+                configurationPrefix + ".yaml",
                 // properties file
                 configurationPrefix + "." + PropertiesFileType.DEFAULT_EXTENSION,
         };
