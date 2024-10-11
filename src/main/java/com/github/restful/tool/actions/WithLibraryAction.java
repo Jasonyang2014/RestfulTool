@@ -15,10 +15,7 @@ import com.github.restful.tool.utils.Bundle;
 import com.github.restful.tool.view.window.RestfulToolWindowFactory;
 import com.github.restful.tool.view.window.frame.RightToolWindow;
 import com.intellij.icons.AllIcons;
-import com.intellij.openapi.actionSystem.ActionUpdateThread;
-import com.intellij.openapi.actionSystem.AnActionEvent;
-import com.intellij.openapi.actionSystem.CommonDataKeys;
-import com.intellij.openapi.actionSystem.ToggleAction;
+import com.intellij.openapi.actionSystem.*;
 import com.intellij.openapi.project.DumbAware;
 import com.intellij.openapi.project.Project;
 import org.jetbrains.annotations.NotNull;
@@ -28,11 +25,11 @@ import org.jetbrains.annotations.Nullable;
  * @author ZhangYuanSheng
  * @version 1.0
  * com.intellij.diagnostic.PluginException: `ActionUpdateThread.OLD_EDT` is deprecated and going to be removed soon. 'com.github.restful.tool.actions.WithLibraryAction' must override `getActionUpdateThread()` and chose EDT or BGT. See ActionUpdateThread javadoc. [Plugin: cn.cloud.auto.restful.tool]
- * 	at com.intellij.diagnostic.PluginProblemReporterImpl.createPluginExceptionByClass(PluginProblemReporterImpl.java:23)
- * 	at com.intellij.diagnostic.PluginException.createByClass(PluginException.java:90)
- * 	at com.intellij.diagnostic.PluginException.reportDeprecatedUsage(PluginException.java:125)
- * 	at com.intellij.openapi.actionSystem.ActionUpdateThreadAware.getActionUpdateThread(ActionUpdateThreadAware.java:21)
- * 	at com.intellij.openapi.actionSystem.AnAction.getActionUpdateThread(AnAction.java:201)
+ * at com.intellij.diagnostic.PluginProblemReporterImpl.createPluginExceptionByClass(PluginProblemReporterImpl.java:23)
+ * at com.intellij.diagnostic.PluginException.createByClass(PluginException.java:90)
+ * at com.intellij.diagnostic.PluginException.reportDeprecatedUsage(PluginException.java:125)
+ * at com.intellij.openapi.actionSystem.ActionUpdateThreadAware.getActionUpdateThread(ActionUpdateThreadAware.java:21)
+ * at com.intellij.openapi.actionSystem.AnAction.getActionUpdateThread(AnAction.java:201)
  */
 public class WithLibraryAction extends ToggleAction implements DumbAware {
 
@@ -69,6 +66,6 @@ public class WithLibraryAction extends ToggleAction implements DumbAware {
 
     @Override
     public @NotNull ActionUpdateThread getActionUpdateThread() {
-        return ActionUpdateThread.BGT;
+        return ActionUpdateThread.EDT;
     }
 }

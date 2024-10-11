@@ -11,6 +11,7 @@
 package com.github.restful.tool.view.window.frame;
 
 import cn.hutool.http.*;
+import com.github.restful.tool.beans.ContentType;
 import com.github.restful.tool.beans.HttpMethod;
 import com.github.restful.tool.beans.Request;
 import com.github.restful.tool.beans.settings.Settings;
@@ -28,7 +29,11 @@ import com.intellij.openapi.fileTypes.FileType;
 import com.intellij.openapi.fileTypes.impl.FileTypeRenderer;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.ui.ComboBox;
+import com.intellij.psi.NavigatablePsiElement;
+import com.intellij.psi.PsiAnnotation;
 import com.intellij.psi.PsiInvalidElementAccessException;
+import com.intellij.psi.PsiParameter;
+import com.intellij.psi.impl.source.PsiMethodImpl;
 import com.intellij.psi.search.GlobalSearchScope;
 import com.intellij.ui.components.JBLabel;
 import com.intellij.ui.components.JBTextField;
@@ -328,7 +333,8 @@ public class RestDetail extends JPanel {
 
         try {
             if (request != null) {
-                GlobalSearchScope scope = request.getPsiElement().getResolveScope();
+                NavigatablePsiElement psiElement = request.getPsiElement();
+                GlobalSearchScope scope = psiElement.getResolveScope();
                 reqUrl = SystemUtil.buildUrl(
                         RestUtil.scanListenerProtocol(project, scope),
                         RestUtil.scanListenerPort(project, scope),
@@ -345,17 +351,29 @@ public class RestDetail extends JPanel {
                 if (headCache.containsKey(request)) {
                     reqHead = getCache(IDENTITY_HEAD, request);
                 } else {
-                    reqHead = String.format(
-                            "{\n  \"Content-Type\": \"%s\"\n}",
-                            Settings.HttpToolOptionForm.CONTENT_TYPE.getData().getValue()
-                    );
+                    PsiParameter[] parameters = ((PsiMethodImpl) psiElement).getParameterList().getParameters();
+                    for (PsiParameter parameter : parameters) {
+                        PsiAnnotation annotation = parameter.getAnnotation("org.springframework.web.bind.annotation.RequestBody");
+                        if (annotation != null) {
+                            reqHead = String.format(
+                                    "{\n  \"Content-Type\": \"%s\"\n}", ContentType.JSON.getValue()
+                            );
+                        }
+                    }
+                    if (reqHead == null) {
+                        reqHead = String.format(
+                                "{\n  \"Content-Type\": \"%s\"\n}",
+                                Settings.HttpToolOptionForm.CONTENT_TYPE.getData().getValue()
+                        );
+                    }
+
                     setCache(IDENTITY_HEAD, request, reqHead);
                 }
 
                 if (bodyCache.containsKey(request)) {
                     reqBody = getCache(IDENTITY_BODY, request);
                 } else {
-                    convert.setPsiElement(request.getPsiElement());
+                    convert.setPsiElement(psiElement);
                     reqBody = convert.formatString();
                     setCache(IDENTITY_BODY, request, reqBody);
                 }

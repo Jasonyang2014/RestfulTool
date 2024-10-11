@@ -261,7 +261,7 @@ public class PsiUtil {
 
         // 读取字段
         for (PsiField field : psiClass.getAllFields()) {
-            if (hasStaticModifier(field.getModifierList()) || hasFinalModifier(field.getModifierList())) {
+            if (!psiClass.isRecord() && (hasStaticModifier(field.getModifierList()) || hasFinalModifier(field.getModifierList()))) {
                 // 如果字段是static或final则跳过
                 continue;
             }
@@ -271,7 +271,7 @@ public class PsiUtil {
         // 读取Getter|Setter方法对应的字段
         for (PsiMethod method : psiClass.getAllMethods()) {
             final String prefixGet = "get";
-            final String prefixSet = "Set";
+            final String prefixSet = "set";
             final String name = method.getName();
 
             if (name.length() < 4 || !(name.startsWith(prefixGet) || name.startsWith(prefixSet))) {
