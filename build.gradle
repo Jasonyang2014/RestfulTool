@@ -71,7 +71,7 @@ dependencies {
 //}
 
 group 'cn.cloud.auto.restful.tool'
-version '1.4.6'
+version '1.4.7'
 //patchPluginXml {
 //    changeNotes """
 //        <ul>
